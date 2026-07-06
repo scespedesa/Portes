@@ -13,6 +13,6 @@ def get_connexion():
         TrustServerCertificate = yes ;
     """
 
-    # connexion = pyodbc.connect(chaine_connexion)
-    connexion = sqlite3.connect(chaine_connexion)
+    connexion = pyodbc.connect(chaine_connexion)
+    #connexion = sqlite3.connect(chaine_connexion)
     return connexion
