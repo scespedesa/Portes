@@ -1,17 +1,41 @@
-from fastapi import APIRouter
-from db import get_connexion
+from fastapi import APIRouter, Request, Depends
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/portes", tags=["portes"])
+from backend.database import SessionLocal
+from backend.models import Porte
 
+router = APIRouter()
+templates = Jinja2Templates(directory="templates")
 
-@router.get("/")
-def get_portes():
-    connexion = get_connexion()
-    cursor = connexion.cursor()
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-    cursor.execute("SELECT * FROM portes")
-    result = cursor.fetchall()
+@router.get("/portes")
+def liste_portes(request: Request, db: Session = Depends(get_db)):
+    portes = db.query(Porte).all()
+    return templates.TemplateResponse(
+        "portes.html",
+        {
+            "request": request,
+            "portes": portes
+        }
+    )
 
-    connexion.close()
+# @router.get("/portes", response_class=HTMLResponse)
+# def liste_portes(request: Request, db: Session = Depends(get_db)):
 
-    return {"portes": [list(row) for row in result]}
+#     portes = db.query(Porte).all()
+
+#     return templates.TemplateResponse(
+#         "portes.html",
+#         {
+#             "request": request,
+#             "portes": portes
+#         }
+#     )

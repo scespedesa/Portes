@@ -1,29 +1,32 @@
-from fastapi import APIRouter
-from db import get_connexion
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from backend.database import SessionLocal
+from backend.models import Incident
+from fastapi.templating import Jinja2Templates
 
-router = APIRouter(prefix="/incidents", tags=["Incidents"])
+router = APIRouter()
+templates = Jinja2Templates(directory="templates")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
-@router.post("")
-def creer_incident(data: dict):
-    conn = get_connexion()
-    cursor = conn.cursor()
+@router.post("/incidents")
+def create_incident(data: dict, db: Session = Depends(get_db)):
 
-    cursor.execute("""
-        INSERT INTO Incidents (porte_id, type_incident, priorite, description, date_creation , code_erreur , localisation_dommage ,source)
-        VALUES (?, ?, ?, ?)
-    """,
-    data["porte_id"],
-    data["type_incident"],
-    data["priorite"],
-    data["description"],
-    data["date_creation"],
-    data["code_erreur"],
-    data["localisation_dommage"],
-    data["source"]
+    incident = Incident(
+        porte_id=None,  # lo conectamos después bien
+        type_incident=None,
+        priorite=None,
+        description=None,
+        source="QR"
     )
 
-    conn.commit()
-    conn.close()
+    db.add(incident)
+    db.commit()
 
     return {"status": "ok"}

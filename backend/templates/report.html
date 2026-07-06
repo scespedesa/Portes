@@ -1,97 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Report de porte</title>
+<h2>Incident pour porte {{ porte }}</h2>
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #f4f6f8;
-            padding: 20px;
-        }
+<select id="type">
+    <option>OUVERTURE NOK</option>
+    <option>FERMETURE NOK</option>
+</select>
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+<input id="priorite" placeholder="Priorité">
+<textarea id="desc"></textarea>
 
-        h2 {
-            color: #333;
-        }
-
-        select, textarea, button {
-            width: 100%;
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-        }
-
-        button:hover {
-            background: #0056b3;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="card">
-
-    <h2>Porte: {{ porte }}</h2>
-
-    <label>Type de problème</label>
-    <select id="type_incident">
-        <option>OUVERTURE NOK</option>
-        <option>FERMETURE NOK</option>
-        <option>SECURITE NOK</option>
-        <option>MAINTENANCE</option>
-    </select>
-
-    <label>Priorité</label>
-    <select id="priorite">
-        <option>LOW</option>
-        <option>MEDIUM</option>
-        <option>HIGH</option>
-    </select>
-
-    <label>Description</label>
-    <textarea id="description" rows="4"></textarea>
-
-    <button onclick="envoyer()">Envoyer</button>
-
-</div>
+<button onclick="send()">Envoyer</button>
 
 <script>
-function envoyer() {
+function send() {
     fetch("/incidents", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-            porte_id: "{{ porte }}",
-            type_incident: document.getElementById("type_incident").value,
+            type_incident: document.getElementById("type").value,
             priorite: document.getElementById("priorite").value,
-            description: document.getElementById("description").value
+            description: document.getElementById("desc").value
         })
     })
-    .then(res => res.json())
-    .then(data => {
-        alert("Incident envoyé !");
-    });
+    .then(() => alert("OK"));
 }
 </script>
-
-</body>
-</html>

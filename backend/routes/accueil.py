@@ -6,13 +6,9 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/report", response_class=HTMLResponse)
-def report(request: Request, porte: str):
-
+@router.get("/", response_class=HTMLResponse)
+def accueil(request: Request):
     return templates.TemplateResponse(
-        "report.html",
-        {
-            "request": request,
-            "porte": porte
-        }
+        "accueil.html",
+        {"request": request}
     )
