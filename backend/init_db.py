@@ -35,7 +35,7 @@ def initialiser_base():
         voyant_defaut BOOLEAN,
         condamme BOOLEAN,
         freq_utilisation VARCHAR(10),
-        FOREIGN KEY (zone_id) REFERENCES Batiment(zone_id)
+        FOREIGN KEY (batiment_id) REFERENCES Batiment(batiment_id)
     )
     """)
 
