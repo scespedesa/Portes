@@ -1,7 +1,6 @@
 # conexion SQL
-import pyodbc
 import sqlite3
-from config import serveur,basse_de_donnes,utilisateur , mot_de_passe , driver
+from backend.app.config import serveur,basse_de_donnes,utilisateur , mot_de_passe , driver
 
 def get_connexion():
     chaine_connexion = f"""
