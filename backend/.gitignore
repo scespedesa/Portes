@@ -1,0 +1,19 @@
+# python
+__pycache__/
+*.py[cod]
+*.db
+
+# virtual enviroment
+.venv/
+
+# enviroment variables
+.enviroment
+
+# VSCode
+.vscode/
+
+#Pytest
+.pytest_cache/
+
+#Logs
+*.log
