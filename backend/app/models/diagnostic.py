@@ -50,10 +50,17 @@ class Diagnostic(Base):
     perte_etancheite = Column(Boolean,default=False)
     bruits = Column(Boolean,default=False)
     vitesse_reduite = Column(Boolean,default=False)
+
+    #TABLIER
     decrochage_toile = Column(Boolean,default=False)
+    # sil sont plie 50 tubes  los 40 tubes sont plies 
+    #etat_tubes_40
 
 
     date_creation = Column(DateTime(timezone=True), server_default=func.now())
+
+
+    #cree par userX
 
     porte = relationship("Porte", back_populates="diagnostics")
 
