@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getPortes } from "../services/api";
+import { getPortes } from "../../services/api";
+import "./Portes.css";
 
 function Portes(){
     const[portes, setPortes] = useState([]);
@@ -12,21 +13,21 @@ function Portes(){
         });
     },[]);
     return (
-        <div>
+        <div className="container">
             <h1>Accueil Portes MCA</h1>
 
-            {error && (
-                <p>{error}</p>
+            {erreur && (
+                <p>{erreur}</p>
             )}
 
             {portes.map((porte) => (
-                <div key={porte.id}>
-                    <h3>{porte.description}</h3>
+                <div className="porte-card" key={porte.id}>
+                    {porte.nom}  et 
+                    {porte.description}
                 </div>
             ))}
-
-            <p>Portes chargées depuis FastAPI</p>
         </div>
+
     );
     
 }

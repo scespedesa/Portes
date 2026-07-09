@@ -1,9 +1,9 @@
-from fastapi import APIRouter , Depends
+from fastapi import APIRouter , Depends , HTTPException
 from sqlalchemy.orm import Session
 
 from sqlalchemy.orm import joinedload
 
-from app.database import get_db
+from app.database import get_db , SessionLocal
 from app.models.porte import Porte
 from app.schemas.porte import PorteCreate , PorteResponse
 
@@ -36,6 +36,25 @@ def liste_portes(
 ):
     portes  = (db.query(Porte).options(joinedload(Porte.batiment)).all())
     return portes
+
+
+@router.get(
+    "/{porte_id}",response_model=PorteResponse
+)
+def get_porte(
+    porte_id: int 
+):
+    db = SessionLocal()
+    porte =  db.query(Porte).filter(Porte.id==porte_id).first()
+    db.close()
+
+    if porte is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Porte non trouvée"
+        )
+    return porte
+
 
 # @router.get(
 #     "/",response_model=list[PorteResponse]

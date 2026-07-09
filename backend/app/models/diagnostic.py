@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Date
 from sqlalchemy.sql import func
 from app.database import Base
 from sqlalchemy.orm import relationship
+from app.models.intervention import Intervention
+from app.models.analyse import Analyse
 
 class Diagnostic(Base):
     __tablename__ = "Diagnostics"
@@ -32,7 +34,8 @@ class Diagnostic(Base):
     #budget
 
     # Resultats du diagnostic
-
+    # type de degradation :  dechirure de la toile, perforation , usure importante, porte desaligne ,
+    degradation = Column(String(10))
     etat_ouverture = Column(String(10))
     etat_fermeture = Column(String(10))
     etat_securite = Column(String(10))

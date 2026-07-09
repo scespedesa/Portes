@@ -11,9 +11,11 @@ function Navbar(){
                 gap: "20px"
             }}
             >   <Link to = "/">Accueil</Link>
+                <Link to = "/batiments">Batiment</Link>
                 <Link to = "/portes">Portes</Link>
                 <Link to = "/dashboard">Dashboard</Link>
                 <Link to = "/login">Login</Link>
+                <Link to = "/test-enums">Enums</Link>
             </nav>
     );
 }

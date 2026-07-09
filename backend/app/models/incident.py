@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
+
+from app.models.diagnostic_incident import DiagnosticIncident
 from sqlalchemy.sql import func
 
 from app.database import Base
@@ -24,6 +26,13 @@ class Incident(Base):
     date_creation = Column(DateTime(timezone=True), server_default=func.now())
     date_cloture= Column(DateTime(timezone=True), nullable=True)
 
+    # blocage, vibrationes
+    symptomes_observes = Column(Text)
+
+    fonctionne_auto = Column(Boolean,default=True)
+    fonctionne_manuel = Column(Boolean,default=True)
+
+    securite = Column(Text)
 
 
     porte = relationship("Porte", back_populates="incidents")
