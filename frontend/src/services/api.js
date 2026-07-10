@@ -14,11 +14,19 @@ export async function getBatiments(){
     }
     return await response.json();
 }
-export async function getTypeIncidents(){
-    const response = await fetch(`${API_URL}/enums/type-incident/`);
+
+export async function getEnum(endpoint){
+    const response = await fetch(`${API_URL}/enums/${endpoint}/`);
     if (!response.ok){
-        throw new Error("chargement des portes echoué");
+        throw new Error("chargement des symptomes echoué");
     }
-    console.log(response)
     return await response.json();
 }
+
+export const getTypeIncidents = () => getEnum("type-incident")
+export const getLocalisations = () => getEnum("localisation")
+export const getPriorites = () => getEnum("priorite")
+export const getSecurite = () => getEnum("securite")
+export const getStatuts = () => getEnum("statut")
+export const getSymptomes = () => getEnum("symptome")
+export const getEtat = () => getEnum("etat")

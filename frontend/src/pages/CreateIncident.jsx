@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import { getEtat , getLocalisations , getSymptomes , getTypeIncidents , getPriorites , getSecurite , getStatuts } from "../services/api";
 
 function CreateIncident() {
   const { porteId } = useParams();
@@ -14,19 +15,39 @@ function CreateIncident() {
 
   const [degradation, setDegradation] = useState(3);
 
-  const incidentTypes = [
-    "Déchirure de la toile",
-    "Perforation",
-    "Usure anormale",
-    "Désalignement du tablier",
-    "Déformation guides latéraux",
-    "Problème système d'enroulement",
-    "Moteur en défaut",
-    "Défaut capteurs de sécurité",
-    "Porte ne s'ouvre pas",
-    "Porte ne se ferme pas",
-    "Autre",
-  ];
+  const [typeIncidents,setTypeIncidents] = useState([]);
+  const [symptomes,setSymptomes] = useState([]);
+  const [localisations,setLocalisations] = useState([]);
+  const [securite,setSecurite] = useState([]);
+  const [etat,setEtat] = useState([]);
+
+
+  const [formulaire,setFormulaire] = useState(
+    { type_incident:[],
+      autre_incident:"",
+      localisation:"",
+      symptomes:[],
+      fonctionneAuto:null,
+      fonctionneManuel:null,
+      niveauDegradation:3,
+      securite:"",
+      description:""
+    }
+  );
+
+  // const incidentTypes = [
+  //   "Déchirure de la toile",
+  //   "Perforation",
+  //   "Usure anormale",
+  //   "Désalignement du tablier",
+  //   "Déformation guides latéraux",
+  //   "Problème système d'enroulement",
+  //   "Moteur en défaut",
+  //   "Défaut capteurs de sécurité",
+  //   "Porte ne s'ouvre pas",
+  //   "Porte ne se ferme pas",
+  //   "Autre",
+  // ];
 
   const defects = [
     "Blocage moteur",
@@ -36,6 +57,29 @@ function CreateIncident() {
     "Vitesse réduite",
     "Décrochage du tablier",
   ];
+
+
+  // useEffect(() => {
+  //     getTypeIncidents()
+  //         .then(data => {
+  //           setIncident({
+  //             ...incident,
+  //             type_incident: data
+  //           });
+  //           console.log(data)
+  //         })
+  //         .catch(error => {
+  //             console.log(error);
+  //         });
+  // }, []);
+
+  useEffect(() => {
+      getSymptomes().then(setSymptomes).catch(error => {console.log(error);});
+      getTypeIncidents().then(setTypeIncidents);
+      getLocalisations().then(setLocalisations);
+      getSecurite().then(setSecurite);
+      getEtat().then(setEtat);
+  }, []);
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/api/portes/${porteId}`)
@@ -88,21 +132,39 @@ function CreateIncident() {
             </label>
 
             <div className="grid md:grid-cols-2 gap-3">
-              {incidentTypes.map((item) => (
+              {typeIncidents.map((item) => (
                 <label
-                  key={item}
+                  key={item.label}
                   className="flex items-center gap-3 border border-slate-300 rounded-xl p-4 hover:bg-slate-50 cursor-pointer transition"
                 >
                   <input
                     type="checkbox"
+                    value={item.value}
+                    checked ={formulaire.type_incident.includes(item.value)}
                     onChange={(e) => {
-                      if (item === "Autre") {
-                        setAutreIncident(e.target.checked);
-                      }
+                    const checked = e.target.checked;
+                    
+                    console.log(item.value);
+                    console.log(item.label);
+
+
+                    setFormulaire((prev) => ({
+                      ...prev,
+                      type_incident: checked
+                        ? [...prev.type_incident, item.value]
+                        : prev.type_incident.filter((i) => i !== item.value),
+                    }));
+
+                    if (item.label === "Autre") {
+                      console.log(checked)
+                      console.log(formulaire)
+                      setAutreIncident(checked);
+                    }
+
                     }}
                   />
 
-                  <span>{item}</span>
+                  <span>{item.label}</span>
                 </label>
               ))}
             </div>
@@ -117,6 +179,13 @@ function CreateIncident() {
                   type="text"
                   placeholder="Décrivez l'incident"
                   className="w-full border border-slate-300 rounded-lg px-4 py-3"
+                  onChange={(e) => {
+                  setFormulaire((prev) => ({
+                    ...prev,
+                      autre_incident: e.target.value,
+                  })); 
+                  console.log(formulaire);
+                }}
                 />
               </div>
             )}
@@ -133,30 +202,47 @@ function CreateIncident() {
               rows={6}
               placeholder="Décrivez les circonstances et les dommages observés..."
               className="w-full border border-slate-300 rounded-lg px-4 py-3"
+              value={formulaire.description}           
+              onChange={(e) => {
+                  setFormulaire((prev) => ({
+                    ...prev,
+                    description: e.target.value
+                  }));
+                  console.log(formulaire);
+                }}
             />
           </div>
 
           {/* LOCALISATION */}
 
           <div>
-            <label className="block mb-3 font-semibold text-slate-700">
+            <label
+            className="block mb-3 font-semibold text-slate-700">
               Localisation du dommage *
             </label>
 
             <select
               className="w-full border border-slate-300 rounded-lg px-4 py-3"
-              onChange={(e) =>
+              onChange={(e) =>{
                 setAutreLocalisation(e.target.value === "Autre")
-              }
+                console.log(autreLocalisation)
+                console.log(e.target.value)
+                setFormulaire((prev) => ({
+                  ...prev,
+                  localisation: e.target.value
+                }));
+                console.log()
+                  
+              }}
             >
-              <option value="">Sélectionner</option>
-              <option value="Toile">Toile</option>
-              <option value="Guide gauche">Guide gauche</option>
-              <option value="Guide droit">Guide droit</option>
-              <option value="Motorisation">Motorisation</option>
-              <option value="Capteurs sécurité">Capteurs sécurité</option>
-              <option value="Structure">Structure</option>
-              <option value="Autre">Autre</option>
+              {localisations.map((type) => (
+                    <option                 
+                      key={type.value}
+                      value={type.value}                   
+                    >
+                        {type.label}
+                    </option>
+                ))}
             </select>
 
             {autreLocalisation && (
@@ -182,13 +268,33 @@ function CreateIncident() {
             </label>
 
             <div className="grid md:grid-cols-2 gap-3">
-              {defects.map((item) => (
+              {symptomes.map((item) => (
                 <label
-                  key={item}
+                  key={item.value}
                   className="flex items-center gap-3 border border-slate-300 rounded-xl p-4 hover:bg-slate-50 cursor-pointer transition"
                 >
-                  <input type="checkbox" />
-                  <span>{item}</span>
+                  <input type="checkbox"
+
+                      value={item.value}
+                      checked ={formulaire.symptomes.includes(item.value)}
+                      onChange={(e) => {
+                      const checked = e.target.checked;
+                      
+                      console.log(item.value);
+                      console.log(item.label);
+
+
+                      setFormulaire((prev) => ({
+                        ...prev,
+                        symptomes: checked
+                          ? [...prev.symptomes, item.value]
+                          : prev.symptomes.filter((i) => i !== item.value),
+                      }));
+                      }}
+                  
+                  />
+
+                  <span>{item.label}</span>
                 </label>
               ))}
             </div>
@@ -203,10 +309,26 @@ function CreateIncident() {
                 Marche en automatique ?
               </label>
 
-              <select className="w-full border border-slate-300 rounded-lg px-4 py-3">
-                <option>Oui</option>
-                <option>Non</option>
-                <option>Partiellement</option>
+              <select className="w-full border border-slate-300 rounded-lg px-4 py-3"
+                onChange={(e) =>{
+                console.log(e.target.value)
+                setFormulaire((prev) => ({
+                  ...prev,
+                  fonctionneAuto: e.target.value
+                }));
+                console.log()
+                  
+              }}
+              
+              >
+              {etat.map((type) => (
+                    <option
+                      key={type.value}
+                      value={type.value}
+                    >
+                        {type.label}
+                    </option>
+                ))}
               </select>
             </div>
 
@@ -215,10 +337,25 @@ function CreateIncident() {
                 Marche en manuel ?
               </label>
 
-              <select className="w-full border border-slate-300 rounded-lg px-4 py-3">
-                <option>Oui</option>
-                <option>Non</option>
-                <option>Partiellement</option>
+              <select className="w-full border border-slate-300 rounded-lg px-4 py-3"
+                 onChange={(e) =>{
+                console.log(e.target.value)
+                setFormulaire((prev) => ({
+                  ...prev,
+                  fonctionneManuel: e.target.value
+                }));
+                console.log()
+                  
+              }}             
+              >
+              {etat.map((type) => (
+                    <option 
+                      key={type.value}
+                      value={type.value}   
+                    >
+                        {type.label}
+                    </option>
+                ))}
               </select>
             </div>
 
@@ -268,10 +405,27 @@ function CreateIncident() {
               La porte est-elle sécurisée pour les personnes ?
             </label>
 
-            <select className="w-full border border-slate-300 rounded-lg px-4 py-3">
-              <option>Oui</option>
-              <option>Non</option>
-              <option>Sécurisation temporaire</option>
+            <select className="w-full border border-slate-300 rounded-lg px-4 py-3"
+                onChange={(e) =>{
+              console.log(e.target.value)
+              setFormulaire((prev) => ({
+                ...prev,
+                fonctionneAuto: e.target.value
+              }));
+              console.log(formulaire)
+                
+            }}   
+            
+            
+            >
+              {securite.map((type) => (
+                    <option 
+                    key={type.value}
+                    value={type.value}
+                    >
+                        {type.label}
+                    </option>
+                ))}
             </select>
           </div>
 

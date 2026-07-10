@@ -5,6 +5,7 @@ from app.enums.priorite import Priorite
 from app.enums.securite import Securite
 from app.enums.statut import Statut
 from app.enums.symptome import Symptome
+from app.enums.etat import Etat
 
 
 router = APIRouter (
@@ -12,26 +13,38 @@ router = APIRouter (
     tags=["Enums"]
 )
 
+
+def enum_to_list(classe):
+    return [{"value": e.name , "label" : e.value }  for e in classe ]
+
+
+
 @router.get("/type-incident")
 def get_type_incident():
-    return [e.value for e in TypeIncident]
+    #[{"value": e.name , "label" : e.value }  for e in TypeIncident ]
+    # [e.value for e in TypeIncident]
+    return  enum_to_list(TypeIncident)
 
 @router.get("/localisation")
 def get_localisation():
-    return [e.value for e in Localisation]
+    return enum_to_list(Localisation)
 
 @router.get("/priorite")
 def get_priorite():
-    return [e.value for e in Priorite]
+    return enum_to_list(Priorite)
 
 @router.get("/securite")
 def get_securite():
-    return [e.value for e in Securite]
+    return enum_to_list(Securite)
 
 @router.get("/statut")
 def get_statut():
-    return [e.value for e in Statut]
+    return enum_to_list(Statut)
 
 @router.get("/symptome")
 def get_symptome():
-    return [e.value for e in Symptome]
+    return enum_to_list(Symptome)
+
+@router.get("/etat")
+def get_etat():
+    return enum_to_list(Etat)
