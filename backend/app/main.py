@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import Base , engine
-from app.routes import batiments , portes , incidents , diagnostics , analyses , loras , enums
+from app.routes import batiments , portes , incidents , diagnostics , analyses , loras , enums , auth
 from app.models.batiment import Batiment
 from app.models.porte import Porte
 from app.models.incident import Incident
@@ -39,6 +39,7 @@ app.include_router(diagnostics.router)
 app.include_router(analyses.router)
 app.include_router(loras.router)
 app.include_router(enums.router)
+app.include_router(auth.router)
 
 
 @app.get("/api/health")

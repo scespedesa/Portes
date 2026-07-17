@@ -1,3 +1,5 @@
+import CreateIncident from "../pages/CreateIncident";
+
 function Button({children,...props}){
     return(
         <button {...props}

@@ -30,3 +30,18 @@ export const getSecurite = () => getEnum("securite")
 export const getStatuts = () => getEnum("statut")
 export const getSymptomes = () => getEnum("symptome")
 export const getEtat = () => getEnum("etat")
+
+export async function creationIncident(incident){
+    const response = await fetch(`${API_URL}/portes/${incident.porte_id}/incident`,{
+        method : "POST",
+        headers: {"Content-Type": "application/json"
+    },
+    body: JSON.stringify(incident)});
+    if (!response.ok){
+        throw new Error("Erreur lors de la creation de l'incident")
+    }
+    return await response.json();
+
+}
+
+

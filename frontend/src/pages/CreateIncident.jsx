@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
-import { getEtat , getLocalisations , getSymptomes , getTypeIncidents , getPriorites , getSecurite , getStatuts } from "../services/api";
+import { creationIncident, getEtat , getLocalisations , getSymptomes , getTypeIncidents , getPriorites , getSecurite , getStatuts } from "../services/api";
 
 function CreateIncident() {
   const { porteId } = useParams();
@@ -21,19 +21,52 @@ function CreateIncident() {
   const [securite,setSecurite] = useState([]);
   const [etat,setEtat] = useState([]);
 
-
+  
   const [formulaire,setFormulaire] = useState(
-    { type_incident:[],
+    { porte_id:parseInt(porteId),
+      type_incident:[],
       autre_incident:"",
-      localisation:"",
+      localisation_dommage:"",
+      autre_localisation:"",
       symptomes:[],
-      fonctionneAuto:null,
-      fonctionneManuel:null,
-      niveauDegradation:3,
+      fonctionne_auto:null,
+      fonctionne_manuel:null,
+      niveau_degradation:1,
       securite:"",
       description:""
     }
   );
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        // const data = {
+        //     ...formulaire,
+        //     porte_id : Number(porteId)
+        // };
+        console.log("el numero de la puerta : ",porteId);
+        console.log("este es el forms que envia");
+        console.log(formulaire);
+        const result = await creationIncident(formulaire);
+        console.log(result);
+        alert("incident cree avec succes");
+    }
+    catch(error){
+        console.log(error);
+        console.error("Error completo:", error);
+        
+        console.log("STATUS", error.response?.status);
+        console.log("DATA", error.response?.data);
+
+
+        if (error.response) {
+            console.error("Status:", error.response.status);
+            console.error("Data:", error.response.data);
+        }
+    }
+
+    }
+
 
   // const incidentTypes = [
   //   "Déchirure de la toile",
@@ -224,12 +257,17 @@ function CreateIncident() {
             <select
               className="w-full border border-slate-300 rounded-lg px-4 py-3"
               onChange={(e) =>{
-                setAutreLocalisation(e.target.value === "Autre")
+                
+                const selectedLabel =
+                    e.target.options[e.target.selectedIndex].text;
+
+                setAutreLocalisation(selectedLabel === "Autre")
                 console.log(autreLocalisation)
                 console.log(e.target.value)
+                console.log(selectedLabel)
                 setFormulaire((prev) => ({
                   ...prev,
-                  localisation: e.target.value
+                  localisation_dommage: e.target.value
                 }));
                 console.log()
                   
@@ -250,11 +288,17 @@ function CreateIncident() {
                 <label className="block mb-2 text-sm font-medium text-slate-600">
                   Localisation précise du dommage
                 </label>
-
                 <input
                   type="text"
                   placeholder="Ex : axe supérieur, rail interne, support latéral..."
                   className="w-full border border-slate-300 rounded-lg px-4 py-3"
+                  onChange={(e) =>
+                    setFormulaire((prev) => ({
+                      ...prev,
+                      autre_localisation: e.target.value,
+                    }))
+                  }
+
                 />
               </div>
             )}
@@ -311,10 +355,11 @@ function CreateIncident() {
 
               <select className="w-full border border-slate-300 rounded-lg px-4 py-3"
                 onChange={(e) =>{
+                console.log("auto aqui")
                 console.log(e.target.value)
                 setFormulaire((prev) => ({
                   ...prev,
-                  fonctionneAuto: e.target.value
+                  fonctionne_auto: e.target.value
                 }));
                 console.log()
                   
@@ -342,7 +387,7 @@ function CreateIncident() {
                 console.log(e.target.value)
                 setFormulaire((prev) => ({
                   ...prev,
-                  fonctionneManuel: e.target.value
+                  fonctionne_manuel: e.target.value
                 }));
                 console.log()
                   
@@ -379,7 +424,15 @@ function CreateIncident() {
                 <button
                   key={label}
                   type="button"
-                  onClick={() => setDegradation(index + 1)}
+                  onClick={() => {
+                    console.log(index + 1)
+                    setDegradation(index + 1)
+                    setFormulaire((prev)=>({
+                    ...prev,
+                    niveau_degradation: index + 1
+                  }))          
+                  }
+                  }
                   className={`rounded-xl border p-4 transition ${
                     degradation === index + 1
                       ? "bg-slate-800 text-white border-slate-800"
@@ -410,7 +463,7 @@ function CreateIncident() {
               console.log(e.target.value)
               setFormulaire((prev) => ({
                 ...prev,
-                fonctionneAuto: e.target.value
+                securite: e.target.value
               }));
               console.log(formulaire)
                 
@@ -432,7 +485,9 @@ function CreateIncident() {
           {/* ACTIONS */}
 
           <div className="border-t border-slate-200 pt-6 flex justify-end">
-            <Button>
+            <Button
+              onClick={handleSubmit}
+            >
                 envoie
             </Button>
           </div>

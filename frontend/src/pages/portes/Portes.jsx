@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getPortes } from "../../services/api";
 import "./Portes.css";
+import { useAuth } from "../../context/AuthContext";
 
 function Portes(){
+    const { user, loading, logout } = useAuth();
     const[portes, setPortes] = useState([]);
     const[erreur,setErreur] = useState(null);
     useEffect(()=>{

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, DateTime, Text
+from sqlalchemy import Column, JSON, Integer, String, Float, Boolean, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
 
 from app.models.diagnostic_incident import DiagnosticIncident
@@ -15,7 +15,7 @@ class Incident(Base):
 
 
     # QR responses
-    type_incident = Column(String)
+    type_incident = Column(JSON, nullable=True)
     description = Column(Text)
     localisation_dommage = Column(String,default=None)
     
@@ -27,10 +27,12 @@ class Incident(Base):
     date_cloture= Column(DateTime(timezone=True), nullable=True)
 
     # blocage, vibrationes
-    symptomes_observes = Column(Text)
+    symptomes = Column(JSON, nullable=True)
 
     fonctionne_auto = Column(Boolean,default=True)
     fonctionne_manuel = Column(Boolean,default=True)
+
+    niveau_degradation= Column(Integer,default=None)
 
     securite = Column(Text)
 
