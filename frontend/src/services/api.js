@@ -44,4 +44,55 @@ export async function creationIncident(incident){
 
 }
 
+export async function getIncidents(){
+
+    
+    const token = localStorage.getItem("token");
+
+    console.log("TOKEN =", token);
+
+    const response = await fetch(`${API_URL}/incidents/`);
+    if (!response.ok){
+        throw new Error(`chargement incidents de porte `);
+    }
+    return await response.json();
+
+}
+
+
+export async function getIncidentsByPorte(porte_id){
+
+    
+    const token = localStorage.getItem("token");
+
+    console.log("TOKEN =", token);
+
+    const response = await fetch(`${API_URL}/incidents/porte/${porte_id}`);
+    if (!response.ok){
+        throw new Error(`chargement incidents de porte ${porte_id}`);
+    }
+    return await response.json();
+
+}
+
+export async function deleteIncident(id) {
+
+    const token =
+        localStorage.getItem("token");
+
+    const response = await fetch(
+        `${API_URL}/incidents/${id}/`,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    return response;
+}
+
+
+
 

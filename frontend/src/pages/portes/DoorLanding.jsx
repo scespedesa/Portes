@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 
 function DoorLanding(){
@@ -39,7 +39,7 @@ function DoorLanding(){
 
                 >
 
-                    👷 Déclarer un incident
+                    👷 Déclarer un incident - Sans login
 
                 </button>
 
@@ -61,7 +61,7 @@ function DoorLanding(){
 
                     >
 
-                        🔧 Espace technicien
+                        🔧 Déclarer un incident - Espace technicien
 
                     </button>
 

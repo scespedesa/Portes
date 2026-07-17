@@ -27,7 +27,6 @@ export function AuthProvider({ children }) {
     try {
       const me = await getCurrentUser();
       setUser(me);
-      console.log("este es el user", user);
     } catch (error) {
       console.error("Error loading user:", error);
 
