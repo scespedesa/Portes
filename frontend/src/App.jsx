@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Layout from "./components/Layout";
+import AppLayout from "./components/AppLayout";
 
 import Home from "./pages/Home";
 import Portes from "./pages/portes/Portes";
@@ -24,7 +24,7 @@ function App() {
 
             <BrowserRouter>
 
-                <Layout>
+                <AppLayout>
 
                     <Routes>
 
@@ -83,7 +83,7 @@ function App() {
 
                     </Routes>
 
-                </Layout>
+                </AppLayout>
                 
             </BrowserRouter>
         </AuthProvider>

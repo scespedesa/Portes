@@ -6,12 +6,12 @@ from app.models.analyse import Analyse
 from app.schemas.analyse import AnalyseCreate , AnalyseResponse
 
 router = APIRouter (
-    prefix="/api/portes",
-    tags=["Analyses"]
+    prefix="/api/dashboard",
+    tags=["Dashboard"]
 )
 
 @router.post(
-    "/{porte_id}/analyses",
+    "/{porte_id}/dashboard",
     response_model=AnalyseResponse
 )
 def creer_analyse(
@@ -37,3 +37,11 @@ def liste_analyses(
     db: Session = Depends(get_db)
 ):
     return db.query(Analyse).filter(Analyse.porte_id==porte_id).all()
+
+@router.get(
+    "/",response_model=list[AnalyseResponse]
+)
+def analyses(
+    db: Session = Depends(get_db)
+):
+    return db.query(Analyse).all()
