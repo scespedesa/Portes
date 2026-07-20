@@ -16,6 +16,8 @@ import { AuthProvider } from "./context/AuthContext";
 import CreateIncidentTechnique from "./pages/CreateIncidentTechnique";
 import Incidents from "./pages/Incidents";
 import Usine from "./pages/Usine";
+import Diagnostics from "./pages/Diagnostics";
+import Interventions from "./pages/Interventions";
 
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
             <Route path="/batiments" element={<Batiments />} />
             <Route path="/portes" element={<Portes />} />
             <Route path="/incidents" element={<Incidents />} />
+            <Route path="/diagnostics" element={<Diagnostics />} />
+            <Route path="/interventions" element={<Interventions />} />
             
 
             <Route
