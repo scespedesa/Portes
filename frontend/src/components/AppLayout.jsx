@@ -14,7 +14,7 @@ import Sidebar from "../components/Sidebar";
 import Button from "./Button";
 
 
-function AppLayout({ children }){
+function AppLayout(){
 
 
 const [collapsed,setCollapsed]=useState(false);
@@ -152,7 +152,6 @@ overflow-auto
 
 <Outlet/>
 
-{children}
 </main>
 
 

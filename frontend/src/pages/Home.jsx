@@ -12,30 +12,51 @@ import {
 import { Link } from "react-router-dom";
 
 
-const cards = [
-    {
-        to: "/incidents",
-        title: "Incidents",
-        desc: "Signalements en cours, anomalies détectées et suivi des problèmes terrain.",
-        icon: AlertTriangle,
-    },
-    {
-        to: "/diagnostics",
-        title: "Diagnostics",
-        desc: "Contrôles techniques, inspections et analyse de l'état des portes.",
-        icon: Stethoscope,
-    },
-    {
-        to: "/interventions",
-        title: "Interventions",
-        desc: "Gestion des opérations de maintenance et suivi des réparations.",
-        icon: Wrench,
-    },
-];
+import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
+const cards = [
+{
+    title: "Incidents",
+    desc: "Signalements en cours, anomalies détectées et suivi des problèmes terrain.",
+    icon: AlertTriangle,
+    openModal: true,
+},
+{
+    to: "/diagnostics",
+    title: "Diagnostics",
+    desc: "Contrôles techniques, inspections et analyse de l'état des portes.",
+    icon: Stethoscope,
+    openModal: false,
+},
+{
+    to: "/interventions",
+    title: "Interventions",
+    desc: "Gestion des opérations de maintenance et suivi des réparations.",
+    icon: Wrench,
+    openModal: false,
+},
+];
 
 function Home() {
 
+
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const [portes, setPortes] = useState([
+    1,
+    2,
+    3
+    ]);
+
+    const navigate = useNavigate();
+
+    const handleSelectPorte = (porteId) => {
+        navigate(`/portes/${porteId}/incident`);
+        setOpenModal(false);
+    };
 
     return (
 
@@ -90,7 +111,7 @@ function Home() {
                                 text-lg
                             ">
 
-                                PortesPro
+                                PortesMCA
 
                             </div>
 
@@ -218,7 +239,7 @@ function Home() {
                             leading-tight
                         ">
 
-                            Supervisez vos portes industrielles depuis un seul espace.
+                            Supervision des portes industrielles depuis un seul espace.
 
                         </h1>
 
@@ -231,8 +252,8 @@ function Home() {
                             max-w-2xl
                         ">
 
-                            Centralisez l'état des portes,
-                            les incidents, les diagnostics et les interventions
+                            Centralisation de l'état des portes,
+                            ses incidents, ses diagnostics et les interventions
                             de maintenance.
 
                         </p>
@@ -434,7 +455,7 @@ function Home() {
                     {
                         icon: Cog,
                         title:"Gestion centralisée",
-                        desc:"Toutes vos portes regroupées dans une seule interface."
+                        desc:"Toutes les portes regroupées dans une seule interface."
                     }
 
                 ].map((item)=>{
@@ -555,6 +576,7 @@ function Home() {
                     ">
 
 
+
                     {cards.map((card)=>{
 
 
@@ -563,9 +585,15 @@ function Home() {
 
                         return (
 
-                            <Link
+                                <div
                                 key={card.title}
-                                to={card.to}
+                                onClick={() => {
+                                    if (card.openModal) {
+                                        setOpenModal(true);
+                                    } else {
+                                        navigate(card.to);
+                                    }
+                                }}
                                 className="
                                     bg-white
                                     border
@@ -573,8 +601,9 @@ function Home() {
                                     p-6
                                     hover:shadow-xl
                                     transition
+                                    cursor-pointer
                                 "
-                            >
+                                >
 
 
                                 <div className="
@@ -635,14 +664,63 @@ function Home() {
                                     />
 
                                 </div>
+                            </div>
 
 
-                            </Link>
+
 
                         )
 
 
                     })}
+
+                                {openModal && (
+                                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+                                    <div className="bg-white rounded-xl p-6 w-96 shadow-xl">
+
+                                    <h2 className="text-xl font-bold mb-4">
+                                        Sélectionnez une porte
+                                    </h2>
+
+                                    <div className="flex flex-col gap-2">
+
+                                        {portes.map((porte) => (
+                                        <button
+                                            key={porte}
+                                            onClick={() => handleSelectPorte(porte)}
+                                            className="
+                                            p-3
+                                            border
+                                            rounded-lg
+                                            hover:bg-gray-100
+                                            "
+                                        >
+                                            {porte}
+                                        </button>
+                                        ))}
+
+                                    </div>
+
+                                    <button
+                                        onClick={() => setOpenModal(false)}
+                                        className="
+                                        mt-4
+                                        w-full
+                                        bg-red-500
+                                        text-white
+                                        p-3
+                                        rounded-lg
+                                        hover:bg-red-600
+                                        "
+                                    >
+                                        Fermer
+                                    </button>
+
+                                    </div>
+
+                                </div>
+                                )}
 
 
                     </div>

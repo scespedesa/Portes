@@ -34,7 +34,6 @@ function CreateIncidentTechnique() {
         symptomes:[],
         fonctionne_auto:null,
         fonctionne_manuel:null,
-        niveau_degradation:1,
         securite:"",
         description:""
     }

@@ -17,14 +17,18 @@ router = APIRouter (
 
 @router.get("/")
 def get_incidents(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
-    incidents  = (current_user.query(Incident).options(joinedload(Incident.porte)).all())
+    incidents = (
+        db.query(Incident)
+        .options(joinedload(Incident.porte))
+        .all()
+    )
+
     return incidents
 
 @router.get("/porte/{porte_id}",  response_model=list[IncidentResponse])
-def get_incidents(
+def get_incidents_by_porte(
     porte_id: int
 ):
     db = SessionLocal()
