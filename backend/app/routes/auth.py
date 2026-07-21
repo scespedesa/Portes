@@ -32,7 +32,7 @@ def login(
 ):
     token= authenticate_user(
         db,
-        data.username,
+        data.email,
         data.password
     )
     if not token:

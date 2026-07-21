@@ -3,11 +3,11 @@ from app.models.user import User
 
 def authenticate_user(
         db,
-        username,
+        email,
         password
 ):
     user= (
-        db.query(User).filter(User.nom==username).first()
+        db.query(User).filter(User.email==email).first()
     )
     if not user:
         return None
