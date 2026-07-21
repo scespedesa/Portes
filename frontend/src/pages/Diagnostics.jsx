@@ -28,12 +28,19 @@ import {
 const empty = () => ({
   id: Date.now(),
   porteId: "",
-  date: new Date().toISOString().slice(0, 10),
+  date_creation: new Date().toISOString().slice(0, 10),
   technicien: "",
   observations: "",
   recommandations: "",
   etatGeneral: "bon",
   attachments: [],
+  source: "",
+  budget:0,
+  etat_systemes:[],
+  degradation:[],
+  defaut_observes:[],
+  date_validation: new Date().toISOString().slice(0, 10),
+
 });
 
 
@@ -80,6 +87,12 @@ export default function Diagnostics() {
       recommandations: "Aucune",
       etatGeneral: "bon",
       attachments: [],
+      source: "Inspection periodique",
+      budget:140,
+      etat_systemes:["ouverture KO", "mode auto KO"],
+      degradation:["dechirure tablier"],
+      defaut_observes:["vibratios"],
+      date_validation: "2026-07-25",
     },
   ]);
 
@@ -161,6 +174,13 @@ export default function Diagnostics() {
     { label: "Technicien" },
     { label: "État" },
     { label: "Observations" },
+    { label: "Recommandations"},
+    { label: "Source"},
+    { label: "Budget"},
+    { label: "Etat systemes"},   
+    {  label: "Degradation"},
+    {  label: "Defauts observes"},
+    {  label: "Date validation"},
     { label: "Fichiers" },
     {
       label: "Actions",
@@ -266,14 +286,50 @@ export default function Diagnostics() {
 
 
 
+
                 <Td className="max-w-md truncate text-slate-500">
 
                   {d.observations}
 
                 </Td>
 
+                <Td className="max-w-md truncate text-slate-500">
+                  {d.recommandations}
+                </Td>
 
 
+
+                <Td className="max-w-md truncate text-slate-500">
+                  {d.source}
+                </Td>
+
+
+
+
+
+
+                <Td align="right" className="font-medium">
+                  {d.budget.toLocaleString("fr-FR")} €
+                </Td>
+
+                <Td className="max-w-md truncate text-slate-500">
+                  {d.etat_systemes}
+                </Td>
+
+                <Td className="max-w-md truncate text-slate-500">
+                  {d.degradation}
+                </Td>
+
+                <Td className="max-w-md truncate text-slate-500">
+                  {d.defaut_observes}
+                </Td>
+
+                  <Td>
+                    {
+                      new Date(d.date_validation)
+                      .toLocaleDateString("fr-FR")
+                    }
+                  </Td>
                 <Td>
 
                   <AttachmentBadges
@@ -283,8 +339,6 @@ export default function Diagnostics() {
                   />
 
                 </Td>
-
-
 
                 <Td align="right">
 
@@ -301,8 +355,6 @@ export default function Diagnostics() {
                   />
 
                 </Td>
-
-
 
               </tr>
 

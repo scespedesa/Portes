@@ -17,154 +17,154 @@ import Button from "./Button";
 function AppLayout(){
 
 
-const [collapsed,setCollapsed]=useState(false);
+    const [collapsed,setCollapsed]=useState(false);
 
 
-const navigate=useNavigate();
+    const navigate=useNavigate();
 
 
 
-function logout(){
+    function logout(){
 
-localStorage.removeItem("token");
+    localStorage.removeItem("token");
 
-navigate("/");
+    navigate("/");
 
-}
+    }
 
 
 
-return (
+    return (
 
-<div className="
-flex
-min-h-screen
-bg-gray-100
-">
+    <div className="
+    flex
+    min-h-screen
+    bg-gray-100
+    ">
 
 
-<Sidebar
-collapsed={collapsed}
-/>
+    <Sidebar
+    collapsed={collapsed}
+    />
 
 
 
-<div className="
-flex-1
-flex
-flex-col
-">
+    <div className="
+    flex-1
+    flex
+    flex-col
+    ">
 
 
-<header className="
-h-16
-bg-white
-border-b
-flex
-items-center
-justify-between
-px-5
-">
+    <header className="
+    h-16
+    bg-white
+    border-b
+    flex
+    items-center
+    justify-between
+    px-5
+    ">
 
 
-<div className="
-flex
-items-center
-gap-4
-">
+    <div className="
+    flex
+    items-center
+    gap-4
+    ">
 
 
-<button
+    <button
 
-onClick={()=>
-setCollapsed(!collapsed)
-}
+    onClick={()=>
+    setCollapsed(!collapsed)
+    }
 
-className="
-p-2
-rounded-lg
-hover:bg-gray-100
-"
+    className="
+    p-2
+    rounded-lg
+    hover:bg-gray-100
+    "
 
->
+    >
 
-<Menu size={22}/>
+    <Menu size={22}/>
 
 
-</button>
+    </button>
 
 
 
-<h1 className="
-font-semibold
-text-lg
-">
+    <h1 className="
+    font-semibold
+    text-lg
+    ">
 
-Plateforme maintenance
+    Plateforme maintenance
 
-</h1>
+    </h1>
 
 
-</div>
+    </div>
 
 
 
 
 
-<button
+    <button
 
-onClick={logout}
+    onClick={logout}
 
-className="
-flex
-items-center
-gap-2
-border
-rounded-lg
-px-3
-py-2
-hover:bg-gray-100
-"
+    className="
+    flex
+    items-center
+    gap-2
+    border
+    rounded-lg
+    px-3
+    py-2
+    hover:bg-gray-100
+    "
 
->
+    >
 
-<LogOut size={16}/>
+    <LogOut size={16}/>
 
-Déconnexion
+    Déconnexion
 
 
 
-</button>
+    </button>
 
 
-</header>
+    </header>
 
 
 
 
-<main className="
-flex-1
-p-6
-overflow-auto
-">
-    
+    <main className="
+    flex-1
+    p-6
+    overflow-auto
+    ">
+        
 
 
-<Outlet/>
+    <Outlet/>
 
-</main>
+    </main>
 
 
-</div>
+    </div>
 
 
 
-</div>
+    </div>
 
-)
+    )
 
 
-}
+    }
 
 
 export default AppLayout;

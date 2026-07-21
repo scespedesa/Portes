@@ -43,14 +43,16 @@ export function AttachmentPicker({ value = [], onChange, label = "Pièces jointe
     const next = [...value];
     for (const f of Array.from(files)) {
       if (f.size > MAX_BYTES) {
-        toast.error(`${f.name} dépasse 4 Mo`);
+        alert(`${f.name} dépasse 4 Mo`);
+        // toast.error(`${f.name} dépasse 4 Mo`);
         continue;
       }
       try {
         const dataUrl = await readAsDataURL(f);
         next.push({ name: f.name, type: f.type, size: f.size, dataUrl });
       } catch {
-        toast.error(`Erreur de lecture: ${f.name}`);
+        alert(`Erreur de lecture: ${f.name}`);
+        // toast.error(`Erreur de lecture: ${f.name}`);
       }
     }
     onChange(next);

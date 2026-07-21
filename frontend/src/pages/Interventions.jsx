@@ -9,13 +9,17 @@ const empty = () => ({
   id: Date.now(),
   porteId: "",
   incidentId: "",
-  date: new Date().toISOString().slice(0, 10),
+  date_debut: new Date().toISOString().slice(0, 10),
   technicien: "",
   description: "",
-  piecesUtilisees: "",
+  pieces_changees: "",
   cout: 0,
   statut: "planifie",
   attachments: [],
+  capex_opex:"",
+  date_fin: new Date().toISOString().slice(0, 10),
+  diagnostics_id: [],
+  resultat:"",
 });
 
 
@@ -59,7 +63,16 @@ export default function Interventions() {
     {
       id: 1,
       porteId: 1,
-      date: "2026-07-10",
+      date_debut: "2026-07-10",
+      description: "La porte ne ferme plus automatiquement",
+    },
+  ]);
+
+    const [diagnostics] = useState([
+    {
+      id: 1,
+      porteId: 1,
+      date_debut: "2026-07-10",
       description: "La porte ne ferme plus automatiquement",
     },
   ]);
@@ -70,13 +83,17 @@ export default function Interventions() {
       id: 1,
       porteId: 1,
       incidentId: 1,
-      date: "2026-07-12",
+      date_debut: "2026-07-12",
       technicien: "Jean Dupont",
       description: "Remplacement du capteur",
-      piecesUtilisees: "Capteur infrarouge",
+      pieces_changees: "Capteur infrarouge",
       cout: 120,
       statut: "termine",
       attachments: [],
+      capex_opex:"capex",
+      date_fin: "2026-07-20",
+      diagnostics_id: [1,2],
+      resultat:"Remplacement capteur , passage securisé",
     },
   ]);
 
@@ -162,7 +179,7 @@ export default function Interventions() {
 
 
   const head = [
-    { label:"Date"},
+    { label:"Date debut"},
     { label:"Porte"},
     { label:"Technicien"},
     { label:"Description"},
@@ -170,6 +187,9 @@ export default function Interventions() {
     { label:"Coût", align:"right"},
     { label:"Statut"},
     { label:"Fichiers"},
+    { label:"Capex_Opex"},
+    { label:"Date fin"},
+    { label:"resultat"},
     { label:"Actions", align:"right"},
   ];
 
@@ -217,7 +237,7 @@ export default function Interventions() {
           {
             [...Interventions]
             .sort(
-              (a,b)=>b.date.localeCompare(a.date)
+              (a,b)=>b.date_debut.localeCompare(a.date_debut)
             )
             .map((r)=>(
 
@@ -227,7 +247,7 @@ export default function Interventions() {
 
                 <Td>
                   {
-                    new Date(r.date)
+                    new Date(r.date_debut)
                     .toLocaleDateString("fr-FR")
                   }
                 </Td>
@@ -259,16 +279,12 @@ export default function Interventions() {
 
 
                 <Td className="text-sm text-slate-500">
-                  {r.piecesUtilisees}
+                  {r.pieces_changees}
                 </Td>
-
-
 
                 <Td align="right" className="font-medium">
                   {r.cout.toLocaleString("fr-FR")} €
                 </Td>
-
-
 
                 <Td>
 
@@ -277,14 +293,23 @@ export default function Interventions() {
                   </Badge>
 
                 </Td>
-
-
-
                 <Td>
                   <AttachmentBadges items={r.attachments}/>
                 </Td>
+                <Td className="max-w-xs truncate">
+                  {r.capex_opex}
+                </Td>
 
+                <Td>
+                  {
+                    new Date(r.date_fin)
+                    .toLocaleDateString("fr-FR")
+                  }
+                </Td>
 
+                <Td className="max-w-xs truncate">
+                  {r.resultat}
+                </Td>
 
                 <Td align="right">
 
@@ -377,16 +402,16 @@ export default function Interventions() {
 
 
 
-        <Field label="Date">
+        <Field label="Date debut">
 
           <input
             type="date"
             className={inputClass}
-            value={form.date}
+            value={form.date_debut}
             onChange={
               e=>setForm({
                 ...form,
-                date:e.target.value
+                date_debut:e.target.value
               })
             }
           />
@@ -412,6 +437,35 @@ export default function Interventions() {
 
         </Field>
 
+        <Field label="Capex_Opex">
+
+          <input
+            className={inputClass}
+            value={form.capex_opex}
+            onChange={
+              e=>setForm({
+                ...form,
+                capex_opex:e.target.value
+              })
+            }
+          />
+
+        </Field>
+
+        <Field label="Resultat">
+
+          <input
+            className={inputClass}
+            value={form.resultat}
+            onChange={
+              e=>setForm({
+                ...form,
+                resultat:e.target.value
+              })
+            }
+          />
+
+        </Field>
 
 
 
@@ -465,7 +519,21 @@ export default function Interventions() {
         </Field>
 
 
+        <Field label="Date fin">
 
+          <input
+            type="date"
+            className={inputClass}
+            value={form.date_fin}
+            onChange={
+              e=>setForm({
+                ...form,
+                date_fin:e.target.value
+              })
+            }
+          />
+
+        </Field>
 
 
         <div className="col-span-2">
@@ -498,11 +566,11 @@ export default function Interventions() {
 
             <input
               className={inputClass}
-              value={form.piecesUtilisees}
+              value={form.pieces_changees}
               onChange={
                 e=>setForm({
                   ...form,
-                  piecesUtilisees:e.target.value
+                  pieces_changees:e.target.value
                 })
               }
             />
